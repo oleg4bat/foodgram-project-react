@@ -15,8 +15,8 @@ class User(AbstractUser):
         verbose_name = _("user")
         verbose_name_plural = _("users")
 
-        def __str__(self):
-            return f'{self.username}'
+    def __str__(self):
+        return f'{self.username}'
 
 
 class Subscribe(models.Model):
