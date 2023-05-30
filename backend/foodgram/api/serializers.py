@@ -2,11 +2,13 @@ from django.contrib.auth.password_validation import validate_password
 from django.core import exceptions as django_exceptions
 from djoser.serializers import UserCreateSerializer, UserSerializer
 from drf_base64.fields import Base64ImageField
-from recipes.models import (Favorite, Ingredient, Recipe, RecipeIngredient,
-                            ShoppingCart, Tag)
+from recipes.models import (Ingredient, Recipe, RecipeIngredient,
+                            Tag)
 from rest_framework import serializers
-from users.models import Subscribe, User
+from users.models import User
 from django.db import transaction
+
+MIN_1 = 'Нужно указать минимум 1 {name}'
 
 
 class UserReadSerializer(UserSerializer):
@@ -20,11 +22,7 @@ class UserReadSerializer(UserSerializer):
                   'is_subscribed')
 
     def get_is_subscribed(self, obj):
-        if (self.context.get('request')
-           and not self.context['request'].user.is_anonymous):
-            return Subscribe.objects.filter(user=self.context['request'].user,
-                                            author=obj).exists()
-        return False
+        return obj.id in self.context['subscriptions']
 
 
 class UserCreateSerializer(UserCreateSerializer):
@@ -105,11 +103,7 @@ class SubscriptionsSerializer(serializers.ModelSerializer):
                   'recipes', 'recipes_count')
 
     def get_is_subscribed(self, obj):
-        return (
-            self.context.get('request').user.is_authenticated
-            and Subscribe.objects.filter(user=self.context['request'].user,
-                                         author=obj).exists()
-        )
+        return obj.id in self.context['subscriptions']
 
     def get_recipes_count(self, obj):
         return obj.recipes.count()
@@ -145,11 +139,7 @@ class SubscribeAuthorSerializer(serializers.ModelSerializer):
         return obj
 
     def get_is_subscribed(self, obj):
-        return (
-            self.context.get('request').user.is_authenticated
-            and Subscribe.objects.filter(user=self.context['request'].user,
-                                         author=obj).exists()
-        )
+        return obj.id in self.context['subscriptions']
 
     def get_recipes_count(self, obj):
         return obj.recipes.count()
@@ -201,19 +191,10 @@ class RecipeReadSerializer(serializers.ModelSerializer):
                   'text', 'cooking_time')
 
     def get_is_favorited(self, obj):
-        return (
-            self.context.get('request').user.is_authenticated
-            and Favorite.objects.filter(user=self.context['request'].user,
-                                        recipe=obj).exists()
-        )
+        return obj.id in self.context['favorite']
 
     def get_is_in_shopping_cart(self, obj):
-        return (
-            self.context.get('request').user.is_authenticated
-            and ShoppingCart.objects.filter(
-                user=self.context['request'].user,
-                recipe=obj).exists()
-        )
+        return obj.id in self.context['shoping_cart']
 
 
 class RecipeIngredientCreateSerializer(serializers.ModelSerializer):
@@ -257,11 +238,11 @@ class RecipeCreateSerializer(serializers.ModelSerializer):
                 )
         if not obj.get('tags'):
             raise serializers.ValidationError(
-                'Нужно указать минимум 1 тег.'
+                {MIN_1}.format(name='тэг')
             )
         if not obj.get('ingredients'):
             raise serializers.ValidationError(
-                'Нужно указать минимум 1 ингредиент.'
+                {MIN_1}.format(name='ингридиент')
             )
         inrgedient_id_list = [item['id'] for item in obj.get('ingredients')]
         unique_ingredient_id_list = set(inrgedient_id_list)

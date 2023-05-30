@@ -34,6 +34,16 @@ class UserViewSet(mixins.CreateModelMixin,
             return UserReadSerializer
         return UserCreateSerializer
 
+    def get_serializer_context(self):
+        return {
+            'request': self.request,
+            'format': self.format_kwarg,
+            'view': self,
+            'subscriptions': set(Subscribe.objects.filter(
+                user_id=self.request.user).values_list('author_id', flat=True)
+            )
+        }
+
     @action(detail=False, methods=['get'],
             pagination_class=None,
             permission_classes=(IsAuthenticated,))
@@ -105,6 +115,19 @@ class RecipeViewSet(viewsets.ModelViewSet):
     filterset_class = RecipeFilter
     http_method_names = ['get', 'post', 'patch', 'create', 'delete']
 
+    def get_serializer_context(self):
+        return {
+            'request': self.request,
+            'format': self.format_kwarg,
+            'view': self,
+            'favorite': set(Favorite.objects.filter(
+                user_id=self.request.user).values_list('recipe_id', flat=True)
+            ),
+            'shoping_cart': set(ShoppingCart.objects.filter(
+                user_id=self.request.user).values_list('recipe_id', flat=True)
+            ),
+        }
+
     def get_serializer_class(self):
         if self.action in ('list', 'retrieve'):
             return RecipeReadSerializer
@@ -119,8 +142,8 @@ class RecipeViewSet(viewsets.ModelViewSet):
             serializer = RecipeSerializer(recipe, data=request.data,
                                           context={"request": request})
             serializer.is_valid(raise_exception=True)
-            if not Favorite.objects.filter(user=request.user,
-                                           recipe=recipe).exists():
+            if not recipe.favorite_recipe.filter(user_id=request.user
+                                                 ).exists():
                 Favorite.objects.create(user=request.user, recipe=recipe)
                 return Response(serializer.data,
                                 status=status.HTTP_201_CREATED)
@@ -143,8 +166,8 @@ class RecipeViewSet(viewsets.ModelViewSet):
             serializer = RecipeSerializer(recipe, data=request.data,
                                           context={"request": request})
             serializer.is_valid(raise_exception=True)
-            if not ShoppingCart.objects.filter(user=request.user,
-                                               recipe=recipe).exists():
+            if not recipe.shopping_recipe.filter(user_id=request.user
+                                                 ).exists():
                 ShoppingCart.objects.create(user=request.user, recipe=recipe)
                 return Response(serializer.data,
                                 status=status.HTTP_201_CREATED)
