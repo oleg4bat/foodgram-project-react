@@ -22,7 +22,7 @@ class UserReadSerializer(UserSerializer):
                   'is_subscribed')
 
     def get_is_subscribed(self, obj):
-        return obj.id in self.context['subscriptions']
+        return obj.id in self.context.get('subscriptions')
 
 
 class UserCreateSerializer(UserCreateSerializer):
@@ -103,7 +103,7 @@ class SubscriptionsSerializer(serializers.ModelSerializer):
                   'recipes', 'recipes_count')
 
     def get_is_subscribed(self, obj):
-        return obj.id in self.context['subscriptions']
+        return obj.id in self.context.get('subscriptions')
 
     def get_recipes_count(self, obj):
         return obj.recipes.count()
@@ -139,7 +139,7 @@ class SubscribeAuthorSerializer(serializers.ModelSerializer):
         return obj
 
     def get_is_subscribed(self, obj):
-        return obj.id in self.context['subscriptions']
+        return obj.id in self.context.get('subscriptions')
 
     def get_recipes_count(self, obj):
         return obj.recipes.count()
@@ -191,10 +191,10 @@ class RecipeReadSerializer(serializers.ModelSerializer):
                   'text', 'cooking_time')
 
     def get_is_favorited(self, obj):
-        return obj.id in self.context['favorite']
+        return obj.id in self.context.get('favorite')
 
     def get_is_in_shopping_cart(self, obj):
-        return obj.id in self.context['shoping_cart']
+        return obj.id in self.context.get('shoping_cart')
 
 
 class RecipeIngredientCreateSerializer(serializers.ModelSerializer):
