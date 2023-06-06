@@ -19,7 +19,6 @@ ALLOWED_HOSTS = [
     '127.0.0.1',
     'backend',
 ]
-CSRF_TRUSTED_ORIGINS = ['http://158.160.97.154/']
 
 
 # Application definition
