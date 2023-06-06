@@ -29,7 +29,7 @@ class UserCreateSerializer(UserCreateSerializer):
     """[POST] Создание нового пользователя."""
     class Meta:
         model = User
-        fields = ('email', 'username',
+        fields = ('email', 'id', 'username',
                   'first_name', 'last_name',
                   'password')
         extra_kwargs = {

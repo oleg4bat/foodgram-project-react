@@ -40,7 +40,7 @@ class UserViewSet(mixins.CreateModelMixin,
             'format': self.format_kwarg,
             'view': self,
             'subscriptions': set(Subscribe.objects.filter(
-                user_id=self.request.user).values_list('author_id', flat=True)
+                user_id=self.request.user.id).values_list('author_id', flat=True)
             )
         }
 
