@@ -22,7 +22,7 @@ class UserReadSerializer(UserSerializer):
                   'is_subscribed')
 
     def get_is_subscribed(self, obj):
-        return obj.id in self.context.get('subscriptions')
+        return obj.id in self.context.get('subscriptions', False)
 
 
 class UserCreateSerializer(UserCreateSerializer):
