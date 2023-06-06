@@ -40,7 +40,8 @@ class UserViewSet(mixins.CreateModelMixin,
             'format': self.format_kwarg,
             'view': self,
             'subscriptions': set(Subscribe.objects.filter(
-                user_id=self.request.user.id).values_list('author_id', flat=True)
+                user_id=self.request.user.id
+                ).values_list('author_id', flat=True)
             )
         }
 
@@ -121,10 +122,12 @@ class RecipeViewSet(viewsets.ModelViewSet):
             'format': self.format_kwarg,
             'view': self,
             'favorite': set(Favorite.objects.filter(
-                user_id=self.request.user).values_list('recipe_id', flat=True)
+                user_id=self.request.user.id
+                ).values_list('recipe_id', flat=True)
             ),
             'shoping_cart': set(ShoppingCart.objects.filter(
-                user_id=self.request.user).values_list('recipe_id', flat=True)
+                user_id=self.request.user.id
+                ).values_list('recipe_id', flat=True)
             ),
         }
 
