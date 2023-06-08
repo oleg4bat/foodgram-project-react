@@ -207,7 +207,7 @@ class RecipeIngredientCreateSerializer(serializers.ModelSerializer):
     def validate(self, obj):
         ingredient = Ingredient.objects.get(pk=self.id).name
         unit = Ingredient.objects.get(pk=self.id).measurement_unit
-        if self.initial_data.get('amount') < 1:
+        if int(self.initial_data.get('amount')) < 1:
             raise serializers.ValidationError(
                 {ingredient: f'{ingredient} должно быть минимиум 1 {unit}.'}
             )
