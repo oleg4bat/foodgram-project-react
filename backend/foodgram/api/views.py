@@ -73,7 +73,8 @@ class UserViewSet(mixins.CreateModelMixin,
         return self.get_paginated_response(serializer.data)
 
     @action(detail=True, methods=['post', 'delete'],
-            permission_classes=(IsAuthenticated,))
+            permission_classes=(IsAuthenticated,),
+            url_path=r'subscribe')
     def subscribe(self, request, **kwargs):
         author = get_object_or_404(User, id=kwargs['pk'])
 
