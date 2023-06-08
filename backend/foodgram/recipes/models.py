@@ -1,7 +1,6 @@
 from django.core.validators import MinValueValidator, RegexValidator
 from django.db import models
 from users.models import User
-from django.utils.translation import ugettext_lazy as _
 
 
 class Ingredient(models.Model):
@@ -116,8 +115,8 @@ class RecipeIngredient(models.Model):
     amount = models.IntegerField(
         'Количество',
         validators=[MinValueValidator(1,
-                    _('{ingrediant.name} должно быть минимум'
-                      '1 {ingredient.measurement_unit}'))]
+                    ('{ingrediant.name} должно быть минимум'
+                     '1 {ingredient.measurement_unit}'))]
     )
 
     class Meta:
