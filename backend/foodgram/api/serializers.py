@@ -130,7 +130,7 @@ class SubscribeAuthorSerializer(serializers.ModelSerializer):
                   'username', 'first_name',
                   'last_name', 'is_subscribed',
                   'recipes', 'recipes_count')
-        read_only_fields = ('email', 'username', 'author', 'post')
+        read_only_fields = ('email', 'username', 'first_name', 'last_name')
 
     def validate(self, obj):
         if (self.context['request'].user == obj):
