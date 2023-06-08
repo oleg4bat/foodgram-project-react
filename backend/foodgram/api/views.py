@@ -68,8 +68,10 @@ class UserViewSet(mixins.CreateModelMixin,
     def subscriptions(self, request):
         queryset = User.objects.filter(author__user=request.user)
         page = self.paginate_queryset(queryset)
-        serializer = SubscriptionsSerializer(page, many=True,
-                                             context={'request': request})
+        serializer = SubscriptionsSerializer(
+            page,
+            many=True,
+            context=self.get_serializer_context())
         return self.get_paginated_response(serializer.data)
 
     @action(detail=True, methods=['post', 'delete'],
