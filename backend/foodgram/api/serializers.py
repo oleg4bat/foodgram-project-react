@@ -120,8 +120,6 @@ class SubscriptionsSerializer(serializers.ModelSerializer):
 
 class SubscribeAuthorSerializer(serializers.ModelSerializer):
     """[POST, DELETE] Подписка на автора и отписка."""
-    email = serializers.ReadOnlyField()
-    username = serializers.ReadOnlyField()
     is_subscribed = serializers.SerializerMethodField()
     recipes = RecipeSerializer(many=True, read_only=True)
     recipes_count = serializers.SerializerMethodField()
@@ -132,6 +130,7 @@ class SubscribeAuthorSerializer(serializers.ModelSerializer):
                   'username', 'first_name',
                   'last_name', 'is_subscribed',
                   'recipes', 'recipes_count')
+        read_only_fields = ('email', 'username', 'author', 'post')
 
     def validate(self, obj):
         if (self.context['request'].user == obj):
