@@ -5,13 +5,13 @@ from django_filters.rest_framework import DjangoFilterBackend
 from foodgram.settings import FILE_NAME
 from recipes.models import (Favorite, Ingredient, Recipe, RecipeIngredient,
                             ShoppingCart, Tag)
-from rest_framework import filters, mixins, status, viewsets
+from rest_framework import mixins, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from users.models import Subscribe, User
 
-from .filters import RecipeFilter
+from .filters import RecipeFilter, IngredientFilter
 from .pagination import CustomPaginator
 from .permissions import IsAuthorOrReadOnly
 from .serializers import (IngredientSerializer, RecipeCreateSerializer,
@@ -93,10 +93,6 @@ class UserViewSet(mixins.CreateModelMixin,
                               author=author).delete()
             return Response({'detail': 'Успешная отписка'},
                             status=status.HTTP_204_NO_CONTENT)
-
-
-class IngredientFilter(filters.SearchFilter):
-    search_param = 'name'
 
 
 class IngredientViewSet(viewsets.ReadOnlyModelViewSet):
