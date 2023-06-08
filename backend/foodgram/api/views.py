@@ -95,13 +95,17 @@ class UserViewSet(mixins.CreateModelMixin,
                             status=status.HTTP_204_NO_CONTENT)
 
 
+class IngredientFilter(filters.SearchFilter):
+    search_param = 'name'
+
+
 class IngredientViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Ingredient.objects.all()
     permission_classes = (AllowAny, )
     serializer_class = IngredientSerializer
     pagination_class = None
-    filter_backends = (filters.SearchFilter, )
-    search_fields = ('name', )
+    filter_backends = (IngredientFilter, )
+    search_fields = ('^name', )
 
 
 class TagViewSet(viewsets.ReadOnlyModelViewSet):
