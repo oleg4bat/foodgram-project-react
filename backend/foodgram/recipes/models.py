@@ -114,9 +114,7 @@ class RecipeIngredient(models.Model):
     )
     amount = models.IntegerField(
         'Количество',
-        validators=[MinValueValidator(1,
-                    (f'{ingredient.name} должно быть минимум'
-                     f'1 {ingredient.measurement_unit}'))]
+        validators=[MinValueValidator(1)]
     )
 
     class Meta:
