@@ -243,7 +243,8 @@ class RecipeCreateSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError(
                 {MIN_1}.format(name='ингридиент')
             )
-        for i in obj.get('ingredients').values():
+        for i in obj.get('ingredients'):
+            print(i)
             amount = i['amount']
             name = Ingredient.objects.get(i['id']).name
             unit = Ingredient.objects.get(i['id']).measurement_unit
@@ -251,7 +252,7 @@ class RecipeCreateSerializer(serializers.ModelSerializer):
                 raise serializers.ValidationError({
                    'amount': f'Количество {name} должно быть больше 0 {unit}!'
                 })
-        inrgedient_id_list = [item['id'] for item in obj.get('ingredients').values()]
+        inrgedient_id_list = [item['id'] for item in obj.get('ingredients')]
         unique_ingredient_id_list = set(inrgedient_id_list)
         if len(inrgedient_id_list) != len(unique_ingredient_id_list):
             raise serializers.ValidationError(
