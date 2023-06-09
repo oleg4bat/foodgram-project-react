@@ -204,15 +204,6 @@ class RecipeIngredientCreateSerializer(serializers.ModelSerializer):
         model = RecipeIngredient
         fields = ('id', 'amount')
 
-    def validate(self, obj):
-        ingredient = Ingredient.objects.get(pk=self.id).name
-        unit = Ingredient.objects.get(pk=self.id).measurement_unit
-        if int(self.initial_data.get('amount')) < 1:
-            raise serializers.ValidationError(
-                {ingredient: f'{ingredient} должно быть минимиум 1 {unit}.'}
-            )
-        return obj
-
 
 class RecipeCreateSerializer(serializers.ModelSerializer):
     """[POST, PATCH, DELETE] Создание, изменение и удаление рецепта."""
@@ -237,6 +228,18 @@ class RecipeCreateSerializer(serializers.ModelSerializer):
             'image': {'required': True, 'allow_blank': False},
             'cooking_time': {'required': True},
         }
+
+    def validate_ingredients(self, data):
+        ingredients = data
+        for ingredient in ingredients:
+            quantity = ingredient['amount']
+            name = ingredient['ingredient'].name
+            unit = ingredient['ingredient'].measurement_unit
+            if int(quantity) < 1:
+                raise serializers.ValidationError({
+                   'amount': f'Количество {name} должно быть больше 0 {unit}!'
+                })
+        return data
 
     def validate(self, obj):
         for field in ['name', 'text', 'cooking_time']:
