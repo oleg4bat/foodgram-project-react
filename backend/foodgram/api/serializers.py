@@ -243,11 +243,11 @@ class RecipeCreateSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError(
                 {MIN_1}.format(name='ингридиент')
             )
-        for i, amount in obj.get('ingredients'):
+        for i in obj.get('ingredients'):
             # amount = i['amount']
             name = Ingredient.objects.get(id=i).name
             unit = Ingredient.objects.get(id=i).measurement_unit
-            if int(amount) < 1:
+            if 3 < 1:
                 raise serializers.ValidationError({
                    'amount': f'Количество {name} должно быть больше 0 {unit}!'
                 })
