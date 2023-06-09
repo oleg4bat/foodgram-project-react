@@ -229,18 +229,6 @@ class RecipeCreateSerializer(serializers.ModelSerializer):
             'cooking_time': {'required': True},
         }
 
-    def validate_ingredients(self, data):
-        ingredients = data
-        for ingredient in ingredients:
-            quantity = ingredient['amount']
-            name = ingredient['ingredient'].name
-            unit = ingredient['ingredient'].measurement_unit
-            if int(quantity) < 1:
-                raise serializers.ValidationError({
-                   'amount': f'Количество {name} должно быть больше 0 {unit}!'
-                })
-        return data
-
     def validate(self, obj):
         for field in ['name', 'text', 'cooking_time']:
             if not obj.get(field):
@@ -255,6 +243,13 @@ class RecipeCreateSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError(
                 {MIN_1}.format(name='ингридиент')
             )
+        for id, amount in obj.get('ingredients'):
+            if int(amount) < 1:
+                name = Ingredient.objects.get(id).name
+                unit = Ingredient.objects.get(id).measurement_unit
+                raise serializers.ValidationError({
+                   'amount': f'Количество {name} должно быть больше 0 {unit}!'
+                })
         inrgedient_id_list = [item['id'] for item in obj.get('ingredients')]
         unique_ingredient_id_list = set(inrgedient_id_list)
         if len(inrgedient_id_list) != len(unique_ingredient_id_list):
