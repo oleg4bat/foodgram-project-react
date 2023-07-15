@@ -1,4 +1,4 @@
-![example workflow](https://github.com/oleg4bat/foodgram-project-react/actions/workflows/foodgram_actions.yml/badge.svg)
+[![Django-app workflow](https://github.com/oleg4bat/foodgram-project-react/actions/workflows/main.yml/badge.svg)](https://github.com/oleg4bat/foodgram-project-react/actions/workflows/main.yml)
 
 ### [Что это за Foodgram?](http://ovz8.j66017249.pvl9n.vps.myjino.ru/):smiley_cat: 
 Foodgram - это онлайн-сервис + API (DRF), благодаря которому пользователи могут публиковать рецепты, подписываться на публикации других пользователей, добавлять понравившиеся рецепты в список «Избранное», а перед походом в магазин скачивать сводный список продуктов, необходимых для приготовления одного или нескольких выбранных блюд.
