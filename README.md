@@ -9,7 +9,7 @@ Foodgram - это онлайн-сервис + API (DRF), благодаря ко
 Клонировать репозиторий:
 
 ```
-git clone git@github.com:Artem4es/foodgram-project-react.git
+git clone git@github.com:oleg4bat/foodgram-project-react.git
 ```
 Перейти в папку /infra
 
@@ -42,7 +42,7 @@ python3 manage.py collectstatic
 ### Пример взаимодействия с API :old_key:
 После запуска проекта для получения полного доступа к интерфейсу необходимо: 
 
-1. Создать нового пользователя, отправив POST запрос на эндпоинт http://localhost:8000/api/v1/users/
+1. Создать нового пользователя, отправив POST запрос на эндпоинт http://localhost:8000/api/users/
 с именем пользователя и почтой в формате:
 
 ```
@@ -70,5 +70,3 @@ python3 manage.py collectstatic
 ### Документация проекта: :blue_book:
 После запуска проекта (python3 manage.py runserver) документация со списком эндпоинтов доступна по ссылке:
 http://localhost/api/docs/
-или тут
-http://ovz8.j66017249.pvl9n.vps.myjino.ru/api/docs/
